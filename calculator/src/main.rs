@@ -1,6 +1,12 @@
 use std::io;
 
-fn get_number_from_user() -> f64
+/// Gets a number input from user.
+/// 
+/// # Returns
+/// 
+/// A i32 number that the user enters as an input.
+/// If the input is not a 'i32' number this function causes the program to be panic.
+pub fn get_number_from_user() -> i32
 {
     let mut number = String::new();
     println!("Please enter a number:");
@@ -11,38 +17,80 @@ fn get_number_from_user() -> f64
     number.trim().parse().expect("You needed to enter a number")
 }
 
-fn main() {
-    println!("********** My RUST calculator **********");
-
-    let first_number: f64 = get_number_from_user();
-    let second_number: f64 = get_number_from_user();
-
+/// Gets an arithmetic operation from user.
+/// 
+/// # Returns
+/// 
+/// A string that hold the arithmethic operation.
+/// If the user enters wrong input this function causes the program to be panic.
+pub fn get_arithmetic_operation_from_user() -> String
+{
     let mut operation = String::new();
-
-    println!("Choose an operation (+, -, *, /):");
+    println!("Choose a arithmetic operation (+, -, *, /):");
     io::stdin()
         .read_line(&mut operation)
         .expect("Failed to read line");
 
     let operation = operation.trim();
+    match operation {
+        "+" | "-" | "*" | "/" => operation.to_string(),
+        _ => panic!("You enter a wrong arithmetic operation"),
+    }
 
-    let result = match operation {
-        "+" => Ok(first_number + second_number),
-        "-" => Ok(first_number - second_number),
-        "*" => Ok(first_number * second_number),
+}
+
+
+/// Calculates the result of a given arithmetic operation on two given intergers.
+/// 
+/// # Arguments
+/// 
+/// * first_number - The first interger in the calculation.
+/// * second_number - The second interger in the calculation.
+/// * operation - The arithmetic operation to preform.
+/// 
+/// # Returns
+/// 
+/// `Some(f64)` with the result if the operation is successful and there is no overflow.
+/// `None` if the operation overflows.
+/// Other errors cause panic.
+/// 
+/// # Examples
+/// 
+/// ```
+/// assert_eq!(calculation(i32::MAX - 1, 2, "+"), None); // Overflow case
+/// assert_eq!(calculation(10, 2, "+"), Some(12.0));
+/// assert_eq!(calculation(10, 2, "-"), Some(8.0));
+/// assert_eq!(calculation(10, 2, "*"), Some(20.0));
+/// assert_eq!(calculation(10, 2, "/"), Some(5.0));
+/// ```
+pub fn calculation(first_number: i32, second_number: i32, operation: &str) -> Option<f64>
+{
+    match operation {
+        "+" => first_number.checked_add(second_number).map(|res| res as f64),
+        "-" => first_number.checked_sub(second_number).map(|res| res as f64),
+        "*" => first_number.checked_mul(second_number).map(|res| res as f64),
         "/" => {
-            if second_number != 0.0 {
-                Ok(first_number / second_number)
+            if second_number != 0 {
+                Some(first_number as f64 / second_number as f64)
             }
             else {
-                Err("Cannot divide by zero!")
+                panic!("Cannot divide by zero!")
             }
         },
-        _ => Err("Choose invalid operation"),
-    };
+        _ => panic!("Choose a wrong arithmetic operation"),
+    }
+}
 
-    match result {
-        Ok(result) => println!("Result: {result}"),
-        Err(error_msg) => println!("{error_msg}")
+/// Executes a calculator program that gets inputs from user.
+fn main() {
+    println!("********** My RUST calculator **********");
+
+    let first_number= get_number_from_user();
+    let second_number= get_number_from_user();
+    let operation = get_arithmetic_operation_from_user();
+
+    match calculation(first_number, second_number, &operation) {
+        Some(value) => println!("Result: {value}"),
+        None => panic!("An overflow happens"),
     };
 }
