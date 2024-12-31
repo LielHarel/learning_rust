@@ -7,13 +7,13 @@ use std::io;
 /// A i32 number that the user enters as an input.
 /// If the input is not a 'i32' number this function causes the program to be panic.
 pub fn get_number_from_user() -> i32 {
-    let mut number = String::new();
+    let mut user_input = String::new();
     println!("Please enter a number:");
     io::stdin()
-        .read_line(&mut number)
+        .read_line(&mut user_input)
         .expect("Failed to read line");
 
-    number.trim().parse().expect("You needed to enter a number")
+    user_input.trim().parse().expect("You needed to enter a number")
 }
 
 /// Gets an arithmetic operation from user.
