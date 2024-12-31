@@ -8,6 +8,6 @@ fn main() {
 
     match calculator::calculation(first_number, second_number, &operation) {
         Some(value) => println!("Result: {value}"),
-        None => panic!("An overflow happens"),
+        None => panic!("An overflow happens or divide by zero"),
     };
 }

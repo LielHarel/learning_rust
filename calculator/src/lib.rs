@@ -47,8 +47,8 @@ pub fn get_arithmetic_operation_from_user() -> String {
 /// # Returns
 ///
 /// `Some(f64)` as the result if the operation is successful and there is no overflow.
-/// `None` if the operation overflows.
-/// Other errors cause panic.
+/// `None` if the operation overflows or divide by zero happens.
+/// Panic if get not valid arithmethic operation.
 ///
 /// # Examples
 ///
@@ -70,13 +70,9 @@ pub fn calculation(first_number: i32, second_number: i32, operation: &str) -> Op
         "*" => first_number
             .checked_mul(second_number)
             .map(|res| res as f64),
-        "/" => {
-            if second_number != 0 {
-                Some(first_number as f64 / second_number as f64)
-            } else {
-                panic!("Cannot divide by zero!")
-            }
-        }
+        "/" => first_number
+            .checked_div(second_number)
+            .map(|res| res as f64),
         _ => panic!("Choose a wrong arithmetic operation"),
     }
 }
