@@ -22,16 +22,19 @@ pub fn get_number_from_user() -> i32 {
 ///
 /// A string that hold the arithmethic operation.
 /// If the user enters wrong input this function causes the program to be panic.
-pub fn get_arithmetic_operation_from_user() -> String {
+pub fn get_arithmetic_operation_from_user() -> char {
     let mut operation = String::new();
     println!("Choose a arithmetic operation (+, -, *, /):");
     io::stdin()
         .read_line(&mut operation)
         .expect("Failed to read line");
 
-    let operation = operation.trim();
+    let operation: char = operation
+        .trim()
+        .parse()
+        .expect("You enter a wrong arithmetic operation");
     match operation {
-        "+" | "-" | "*" | "/" => operation.to_string(),
+        '+' | '-' | '*' | '/' => operation,
         _ => panic!("You enter a wrong arithmetic operation"),
     }
 }
@@ -59,18 +62,18 @@ pub fn get_arithmetic_operation_from_user() -> String {
 /// assert_eq!(calculator::calculation(10, 2, "*"), Some(20.0));
 /// assert_eq!(calculator::calculation(10, 2, "/"), Some(5.0));
 /// ```
-pub fn calculation(first_number: i32, second_number: i32, operation: &str) -> Option<f64> {
+pub fn calculation(first_number: i32, second_number: i32, operation: char) -> Option<f64> {
     match operation {
-        "+" => first_number
+        '+' => first_number
             .checked_add(second_number)
             .map(|res| res as f64),
-        "-" => first_number
+        '-' => first_number
             .checked_sub(second_number)
             .map(|res| res as f64),
-        "*" => first_number
+        '*' => first_number
             .checked_mul(second_number)
             .map(|res| res as f64),
-        "/" => first_number
+        '/' => first_number
             .checked_div(second_number)
             .map(|res| res as f64),
         _ => panic!("Choose a wrong arithmetic operation"),
