@@ -1,0 +1,71 @@
+use std::io;
+
+/// Gets a number input from user.
+///
+/// # Returns
+///
+/// A i32 number that the user enters as an input.
+/// If the input is not a 'i32' number this function causes the program to be panic.
+pub fn get_number_from_user() -> i32 {
+    let mut user_input = String::new();
+    println!("Please enter a number:");
+    io::stdin()
+        .read_line(&mut user_input)
+        .expect("Failed to read line");
+
+    user_input
+        .trim()
+        .parse()
+        .expect("You needed to enter a number")
+}
+
+/// Gets an arithmetic operation from user.
+///
+/// # Returns
+///
+/// A string that hold the arithmethic operation.
+/// If the user enters wrong input this function causes the program to be panic.
+pub fn get_arithmetic_operation_from_user() -> char {
+    let mut operation = String::new();
+    println!("Choose a arithmetic operation (+, -, *, /):");
+    io::stdin()
+        .read_line(&mut operation)
+        .expect("Failed to read line");
+
+    let operation: char = operation
+        .trim()
+        .parse()
+        .expect("You enter a wrong arithmetic operation");
+    match operation {
+        '+' | '-' | '*' | '/' => operation,
+        _ => panic!("You enter a wrong arithmetic operation"),
+    }
+}
+
+/// Calculates the result of a given arithmetic operation on two given intergers.
+///
+/// # Returns
+///
+/// `Some(f64)` as the result if the operation is successful and there is no overflow.
+/// `None` if the operation overflows or divide by zero happens.
+/// Panic if get not valid arithmethic operation.
+///
+/// # Examples
+///
+/// ```
+/// assert_eq!(calculator::calculation(i32::MAX - 1, 2, "+"), None); // Overflow case
+/// assert_eq!(calculator::calculation(10, 2, "+"), Some(12.0));
+/// assert_eq!(calculator::calculation(10, 2, "-"), Some(8.0));
+/// assert_eq!(calculator::calculation(10, 2, "*"), Some(20.0));
+/// assert_eq!(calculator::calculation(10, 2, "/"), Some(5.0));
+/// ```
+pub fn calculation(first_number: i32, second_number: i32, operation: char) -> Option<f64> {
+    match operation {
+        '+' => first_number.checked_add(second_number),
+        '-' => first_number.checked_sub(second_number),
+        '*' => first_number.checked_mul(second_number),
+        '/' => first_number.checked_div(second_number),
+        _ => panic!("Choose a wrong arithmetic operation"),
+    }
+    .map(|res| res as f64)
+}
