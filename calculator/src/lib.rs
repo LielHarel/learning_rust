@@ -44,12 +44,6 @@ pub fn get_arithmetic_operation_from_user() -> char {
 
 /// Calculates the result of a given arithmetic operation on two given intergers.
 ///
-/// # Arguments
-///
-/// * first_number - The first interger in the calculation.
-/// * second_number - The second interger in the calculation.
-/// * operation - The arithmetic operation to preform.
-///
 /// # Returns
 ///
 /// `Some(f64)` as the result if the operation is successful and there is no overflow.
