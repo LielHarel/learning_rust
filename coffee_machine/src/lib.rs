@@ -51,11 +51,12 @@ pub mod coffee {
     pub struct CoffeeOrder {
         pub coffee_type: CoffeeType,
         pub coffee_size: CoffeeSize,
+        pub sugar_amount: u32,
     }
 
     impl fmt::Display for CoffeeOrder {
         fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-            write!(f, "{:?} {}", self.coffee_size, self.coffee_type)
+            write!(f, "{:?} {} with {} sugar spoons", self.coffee_size, self.coffee_type, self.sugar_amount)
         }
     }
 
