@@ -13,7 +13,10 @@ pub fn get_number_from_user() -> i32 {
         .read_line(&mut user_input)
         .expect("Failed to read line");
 
-    user_input.trim().parse().expect("You needed to enter a number")
+    user_input
+        .trim()
+        .parse()
+        .expect("You needed to enter a number")
 }
 
 /// Gets an arithmetic operation from user.
@@ -64,18 +67,11 @@ pub fn get_arithmetic_operation_from_user() -> char {
 /// ```
 pub fn calculation(first_number: i32, second_number: i32, operation: char) -> Option<f64> {
     match operation {
-        '+' => first_number
-            .checked_add(second_number)
-            .map(|res| res as f64),
-        '-' => first_number
-            .checked_sub(second_number)
-            .map(|res| res as f64),
-        '*' => first_number
-            .checked_mul(second_number)
-            .map(|res| res as f64),
-        '/' => first_number
-            .checked_div(second_number)
-            .map(|res| res as f64),
+        '+' => first_number.checked_add(second_number),
+        '-' => first_number.checked_sub(second_number),
+        '*' => first_number.checked_mul(second_number),
+        '/' => first_number.checked_div(second_number),
         _ => panic!("Choose a wrong arithmetic operation"),
     }
+    .map(|res| res as f64)
 }
