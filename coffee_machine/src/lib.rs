@@ -1,7 +1,7 @@
 /// This module implement a coffee order module with all the options for an order
 pub mod coffee {
     use std::fmt;
-    
+        
     #[derive(Debug)]
     pub enum CoffeeSize {
         Big,

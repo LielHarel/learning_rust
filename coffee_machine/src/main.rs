@@ -1,33 +1,33 @@
-use coffee_machine::coffee::*;
+use coffee_machine::coffee;
 fn main() {
     let orders = [
-        CoffeeOrder {
-            coffee_type: CoffeeType::Affogato {
-                ice_cream: IceCreamType::Chocolate,
+        coffee::CoffeeOrder {
+            coffee_type: coffee::CoffeeType::Affogato {
+                ice_cream: coffee::IceCreamType::Chocolate,
             },
-            coffee_size: CoffeeSize::Big,
+            coffee_size: coffee::CoffeeSize::Big,
             sugar_amount: 1,
         },
-        CoffeeOrder {
-            coffee_type: CoffeeType::ColdCoffee { num_ice_cubes: 2 },
-            coffee_size: CoffeeSize::Small,
+        coffee::CoffeeOrder {
+            coffee_type: coffee::CoffeeType::ColdCoffee { num_ice_cubes: 2 },
+            coffee_size: coffee::CoffeeSize::Small,
             sugar_amount: 2,
         },
-        CoffeeOrder {
-            coffee_type: CoffeeType::Americano,
-            coffee_size: CoffeeSize::Medium,
+        coffee::CoffeeOrder {
+            coffee_type: coffee::CoffeeType::Americano,
+            coffee_size: coffee::CoffeeSize::Medium,
             sugar_amount: 2,
         },
-        CoffeeOrder {
-            coffee_type: CoffeeType::Espresso {
-                espresso_kind: EspressoType::Double,
+        coffee::CoffeeOrder {
+            coffee_type: coffee::CoffeeType::Espresso {
+                espresso_kind: coffee::EspressoType::Double,
             },
-            coffee_size: CoffeeSize::Medium,
+            coffee_size: coffee::CoffeeSize::Medium,
             sugar_amount: 3,
         },
-        CoffeeOrder {
-            coffee_type: CoffeeType::Macchiato,
-            coffee_size: CoffeeSize::Big,
+        coffee::CoffeeOrder {
+            coffee_type: coffee::CoffeeType::Macchiato,
+            coffee_size: coffee::CoffeeSize::Big,
             sugar_amount: 4,
         },
     ];
