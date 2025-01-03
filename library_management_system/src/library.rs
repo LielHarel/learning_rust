@@ -9,6 +9,7 @@ struct BookEntry {
     amount_of_copies: u32,
 }
 
+/// An entry in the database of library about a existed books .
 impl BookEntry {
     fn new(book: book::Book) -> Self {
         BookEntry {
@@ -53,6 +54,7 @@ impl fmt::Display for BookEntry {
     }
 }
 
+/// A struct that manage a library and its books.
 #[derive(Debug)]
 pub struct Library {
     books_list: HashMap<(String, String), BookEntry>,
@@ -145,7 +147,7 @@ mod tests {
     }
 
     #[test]
-    fn test_borrowing_book() {
+    fn test_good_borrowing_book() {
         let mut library = Library::new();
         library.add_new_book(book::Book::new(
             "Try",
@@ -171,5 +173,25 @@ mod tests {
             *book,
             book::Book::new("Try", "Try2", book::BookCatagory::Cook, 2020)
         );
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_remove_borroed_book() {
+        let mut library = Library::new();
+        library.add_new_book(book::Book::new(
+            "Try",
+            "Try2",
+            book::BookCatagory::Cook,
+            2020,
+        ));
+
+        let borroed_book = library.borrow_book("Try", "Try2");
+        assert_eq!(
+            *borroed_book,
+            book::Book::new("Try", "Try2", book::BookCatagory::Cook, 2020)
+        );
+
+        library.remove_book("Try", "Try2");
     }
 }

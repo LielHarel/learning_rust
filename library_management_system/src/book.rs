@@ -1,10 +1,10 @@
 //! This module implements a book struct that contains all the information about the book.
 
-use std::fmt;
-use std::str;
+use std::{fmt, io, str};
 
 const CURRENT_YEAR: u32 = 2025;
 
+/// A book possible catagories.
 #[derive(Debug, PartialEq, Eq)]
 pub enum BookCatagory {
     Horror,
@@ -45,6 +45,7 @@ impl str::FromStr for BookCatagory {
     }
 }
 
+/// A struct that holds all the information about a book.
 #[derive(Debug, Eq)]
 pub struct Book {
     name: String,
@@ -71,13 +72,50 @@ impl Book {
     pub fn get_id(&self) -> (String, String) {
         (self.name.clone(), self.author.clone())
     }
+
+    /// Asks full details about a book from user and returns an instance of [`Book`].
+    /// If wrong input enters, the function panics/
+    pub fn get_book_from_user() -> Self {
+        println!("Please enter book name:");
+        let mut book_name = String::new();
+        io::stdin()
+            .read_line(&mut book_name)
+            .expect("Failed to read line");
+
+        println!("Please enter author name:");
+        let mut author_name = String::new();
+        io::stdin()
+            .read_line(&mut author_name)
+            .expect("Failed to read line");
+
+        println!("Please enter book's catagory:");
+        let mut user_input = String::new();
+        io::stdin()
+            .read_line(&mut user_input)
+            .expect("Failed to read line");
+        let book_catagory: BookCatagory = user_input.trim().parse().expect("Invalid book catagory");
+
+        println!("Please enter book's year of publication:");
+        let mut user_input = String::new();
+        io::stdin()
+            .read_line(&mut user_input)
+            .expect("Failed to read line");
+        let year_of_publication: u32 = user_input.trim().parse().expect("Invalid number");
+
+        Book::new(
+            book_name.to_lowercase().trim(),
+            author_name.to_lowercase().trim(),
+            book_catagory,
+            year_of_publication,
+        )
+    }
 }
 
 impl fmt::Display for Book {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "The book '{}' by {} is a {} book that was published in {}",
+            "the book '{}' by '{}' is a {} book that was published in {}",
             self.name, self.author, self.catagory, self.year_of_publication
         )
     }
