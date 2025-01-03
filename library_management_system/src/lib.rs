@@ -24,8 +24,8 @@ fn get_book_id_from_user() -> (String, String) {
         .expect("Failed to read line");
 
     (
-        book_name.to_lowercase().trim().to_string(),
-        author_name.to_lowercase().trim().to_string(),
+        book_name.trim().to_lowercase(),
+        author_name.trim().to_lowercase(),
     )
 }
 
