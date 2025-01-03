@@ -74,7 +74,7 @@ impl Book {
     }
 
     /// Asks full details about a book from user and returns an instance of [`Book`].
-    /// If wrong input enters, the function panics/
+    /// If wrong input enters, the function panics.
     pub fn get_book_from_user() -> Self {
         println!("Please enter book name:");
         let mut book_name = String::new();

@@ -9,7 +9,7 @@ struct BookEntry {
     amount_of_copies: u32,
 }
 
-/// An entry in the database of library about a existed books .
+/// An entry in the database of a library about an existed books .
 impl BookEntry {
     fn new(book: book::Book) -> Self {
         BookEntry {
@@ -35,11 +35,11 @@ impl BookEntry {
     fn return_book(&mut self) {
         self.curent_amount += 1;
         if self.curent_amount > self.amount_of_copies {
-            self.add_copy_of_book();
+            self.amount_of_copies = self.curent_amount;
         }
     }
 
-    fn is_borrow(&self) -> bool {
+    fn is_borrowed(&self) -> bool {
         return self.curent_amount != self.amount_of_copies;
     }
 }
@@ -54,7 +54,7 @@ impl fmt::Display for BookEntry {
     }
 }
 
-/// A struct that manage a library and its books.
+/// A struct that helps to manage a library and its books.
 #[derive(Debug)]
 pub struct Library {
     books_list: HashMap<(String, String), BookEntry>,
@@ -88,12 +88,12 @@ impl Library {
     }
 
     /// Removes a book (identifies by its name and its author name) from the library if it is not borrowed.
-    /// If the booked is borrowed this function panics.
+    /// If the book is borrowed this function panics.
     pub fn remove_book(&mut self, book_name: &str, author_name: &str) {
         let book_id = (book_name.to_string(), author_name.to_string());
         match self.books_list.get(&book_id) {
             Some(book_entry) => {
-                if book_entry.is_borrow() {
+                if book_entry.is_borrowed() {
                     panic!("Cannot remove a borrowed book");
                 } else {
                     let _ = self.books_list.remove(&book_id);
