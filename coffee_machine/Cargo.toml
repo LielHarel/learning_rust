@@ -1,0 +1,7 @@
+[package]
+name = "coffee_machine"
+version = "0.1.0"
+edition = "2021"
+description = "A coffee machine library"
+
+[dependencies]
