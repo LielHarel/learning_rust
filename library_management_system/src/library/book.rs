@@ -52,6 +52,15 @@ pub struct BookID {
     pub author: String,
 }
 
+impl BookID {
+    pub fn new(name: &str, author: &str) -> Self {
+        BookID {
+            name: name.to_string(),
+            author: author.to_string(),
+        }
+    }
+}
+
 /// A struct that holds all the information about a book.
 #[derive(Debug, PartialEq)]
 pub struct Book {
@@ -67,10 +76,7 @@ impl Book {
             panic!("{year_of_publication} is not valid since the year now is just {CURRENT_YEAR}");
         }
         Book {
-            book_id: BookID {
-                name: name.to_string(),
-                author: author.to_string(),
-            },
+            book_id: BookID::new(name, author),
             catagory,
             year_of_publication,
         }

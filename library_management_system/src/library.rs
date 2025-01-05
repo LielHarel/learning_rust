@@ -83,10 +83,7 @@ impl Library {
     /// Removes a book (identifies by its name and its author name) from the library if it is not borrowed.
     /// If the book is borrowed this function panics.
     pub fn remove_book(&mut self, book_name: &str, author_name: &str) {
-        let book_id = book::BookID {
-            name: book_name.to_string(),
-            author: author_name.to_string(),
-        };
+        let book_id = book::BookID::new(book_name, author_name);
         match self.books_list.get(&book_id) {
             Some(book_entry) => {
                 if book_entry.is_borrowed() {
@@ -102,20 +99,17 @@ impl Library {
     /// If cannot borrow it, the function panics.
     pub fn borrow_book(&mut self, book_name: &str, author_name: &str) {
         self.books_list
-            .get_mut(&book::BookID {
-                name: book_name.to_string(),
-                author: author_name.to_string(),
-            })
+            .get_mut(&book::BookID::new(book_name, author_name))
             .expect("Try to borrow not exist book")
             .borrow_book();
     }
 
     /// Returns a book to the library.
     pub fn return_book(&mut self, book_name: &str, author_name: &str) {
-        match self.books_list.get_mut(&book::BookID {
-            name: book_name.to_string(),
-            author: author_name.to_string(),
-        }) {
+        match self
+            .books_list
+            .get_mut(&book::BookID::new(book_name, author_name))
+        {
             Some(book_entry) => book_entry.return_book(),
             None => println!("Try to return a book that does not belong to the library"),
         }
