@@ -99,14 +99,14 @@ impl Library {
 
     /// Borrows a book by its name and its author name.
     /// If cannot borrow it, the function panics.
-    pub fn borrow_book(&mut self, book_name: &str, author_name: &str) -> &book::Book {
+    pub fn borrow_book(&mut self, book_name: &str, author_name: &str) {
         self.books_list
             .get_mut(&book::BookID {
                 name: book_name.to_string(),
                 author: author_name.to_string(),
             })
             .expect("Try to borrow not exist book")
-            .borrow_book()
+            .borrow_book();
     }
 
     /// Returns a book to the library.

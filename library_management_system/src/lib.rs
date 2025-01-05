@@ -38,8 +38,7 @@ pub fn remove_book_user_ask(library: &mut library::Library) {
 /// Borrows a book the user asks from the library.
 pub fn borrow_book_user_ask(library: &mut library::Library) {
     let book_id = get_book_id_from_user();
-    let book = library.borrow_book(&book_id.0, &book_id.1);
-    println!("The borrowed book is ==> {book}");
+    library.borrow_book(&book_id.0, &book_id.1);
 }
 
 /// Returns a book the user asks to the library.
