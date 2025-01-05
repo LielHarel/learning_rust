@@ -68,9 +68,8 @@ impl Library {
             Some(book_entry) => {
                 if book_entry.book != new_book {
                     panic!("New book has the same ID but it is not the same book as the exist one");
-                } else {
-                    book_entry.add_copy_of_book();
                 }
+                book_entry.add_copy_of_book();
             }
             None => {
                 let _ = self
@@ -83,14 +82,16 @@ impl Library {
     /// Removes a book (identifies by its name and its author name) from the library if it is not borrowed.
     /// If the book is borrowed this function panics.
     pub fn remove_book(&mut self, book_name: &str, author_name: &str) {
-        let book_id= book::BookID { name: book_name.to_string(), author: author_name.to_string() };
+        let book_id = book::BookID {
+            name: book_name.to_string(),
+            author: author_name.to_string(),
+        };
         match self.books_list.get(&book_id) {
             Some(book_entry) => {
                 if book_entry.is_borrowed() {
                     panic!("Cannot remove a borrowed book");
-                } else {
-                    let _ = self.books_list.remove(&book_id);
                 }
+                let _ = self.books_list.remove(&book_id);
             }
             None => println!("The book already doesn't exist"),
         }
@@ -99,21 +100,21 @@ impl Library {
     /// Borrows a book by its name and its author name.
     /// If cannot borrow it, the function panics.
     pub fn borrow_book(&mut self, book_name: &str, author_name: &str) -> &book::Book {
-        match self
-            .books_list
-            .get_mut(&book::BookID { name: book_name.to_string(), author: author_name.to_string() })
-        {
-            Some(book_entry) => book_entry.borrow_book(),
-            None => panic!("Try to borrow not exist book"),
-        }
+        self.books_list
+            .get_mut(&book::BookID {
+                name: book_name.to_string(),
+                author: author_name.to_string(),
+            })
+            .expect("Try to borrow not exist book")
+            .borrow_book()
     }
 
     /// Returns a book to the library.
-    pub fn return_book(&mut self, book_name: &str, author_name: &str) {  
-        match self
-            .books_list
-            .get_mut(&book::BookID { name: book_name.to_string(), author: author_name.to_string() })
-        {
+    pub fn return_book(&mut self, book_name: &str, author_name: &str) {
+        match self.books_list.get_mut(&book::BookID {
+            name: book_name.to_string(),
+            author: author_name.to_string(),
+        }) {
             Some(book_entry) => book_entry.return_book(),
             None => println!("Try to return a book that does not belong to the library"),
         }
@@ -131,7 +132,7 @@ impl fmt::Display for Library {
 
 #[cfg(test)]
 mod tests {
-    use super::{Library, book};
+    use super::{book, Library};
 
     #[test]
     #[should_panic]
@@ -155,9 +156,10 @@ mod tests {
             2020,
         ));
         assert_ne!(
-            library
-                .books_list
-                .get(&book::BookID{name: "Try".to_string(), author: "Try2".to_string()}),
+            library.books_list.get(&book::BookID {
+                name: "Try".to_string(),
+                author: "Try2".to_string()
+            }),
             None
         );
 

@@ -41,10 +41,11 @@ impl str::FromStr for BookCatagory {
             "drama" => Ok(BookCatagory::Drama),
             "cook" => Ok(BookCatagory::Cook),
             _ => Err(format!("{input} is invalid book catagory")),
-        }   
+        }
     }
 }
 
+/// A struct that holds all the information that identifies book.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct BookID {
     pub name: String,
@@ -52,7 +53,7 @@ pub struct BookID {
 }
 
 /// A struct that holds all the information about a book.
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Book {
     book_id: BookID,
     catagory: BookCatagory,
@@ -66,7 +67,10 @@ impl Book {
             panic!("{year_of_publication} is not valid since the year now is just {CURRENT_YEAR}");
         }
         Book {
-            book_id: BookID{name: name.to_string(), author: author.to_string()},
+            book_id: BookID {
+                name: name.to_string(),
+                author: author.to_string(),
+            },
             catagory,
             year_of_publication,
         }
@@ -125,17 +129,9 @@ impl fmt::Display for Book {
     }
 }
 
-impl PartialEq for Book {
-    fn eq(&self, other: &Self) -> bool {
-        self.book_id == other.book_id
-            && self.catagory == other.catagory
-            && self.year_of_publication == other.year_of_publication
-    }
-}
-
 #[cfg(test)]
 mod tests {
-    use super::{Book, BookCatagory};
+    use crate::book::{Book, BookCatagory};
 
     #[test]
     fn test_not_exist_catagory_string() {
