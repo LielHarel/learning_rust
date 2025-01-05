@@ -41,7 +41,7 @@ impl str::FromStr for BookCatagory {
             "drama" => Ok(BookCatagory::Drama),
             "cook" => Ok(BookCatagory::Cook),
             _ => Err(format!("{input} is invalid book catagory")),
-        }
+        }   
     }
 }
 
@@ -132,7 +132,7 @@ impl PartialEq for Book {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::{Book, BookCatagory};
 
     #[test]
     fn test_not_exist_catagory_string() {

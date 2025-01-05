@@ -116,7 +116,7 @@ impl Library {
     }
 
     /// Returns a book to the library.
-    pub fn return_book(&mut self, book_name: &str, author_name: &str) {
+    pub fn return_book(&mut self, book_name: &str, author_name: &str) {  
         match self
             .books_list
             .get_mut(&(book_name.to_string(), author_name.to_string()))
@@ -130,7 +130,7 @@ impl Library {
 impl fmt::Display for Library {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         for book in self.books_list.values() {
-            let _ = write!(f, "{}\n\n", book);
+            write!(f, "{}\n\n", book)?;
         }
         Ok(())
     }
@@ -138,7 +138,7 @@ impl fmt::Display for Library {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::{Library, book};
 
     #[test]
     #[should_panic]
