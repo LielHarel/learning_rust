@@ -2,7 +2,7 @@ use library_management_system::library;
 use std::io;
 
 fn main() {
-    let mut library = library::Library::new();
+    let mut library = library::Library::default();
     loop {
         println!("Please choose an operation (enter a number):");
         println!("1) Add a new book to the library:");

@@ -25,7 +25,7 @@ impl BookEntry {
     }
 
     fn borrow_book(&mut self) -> &book::Book {
-        if self.curent_amount <= 0 {
+        if self.curent_amount == 0 {
             panic!("Cannot borrow {} book since does not exist", self.book);
         }
         self.curent_amount -= 1;
@@ -40,7 +40,7 @@ impl BookEntry {
     }
 
     fn is_borrowed(&self) -> bool {
-        return self.curent_amount != self.amount_of_copies;
+        self.curent_amount != self.amount_of_copies
     }
 }
 
@@ -55,19 +55,12 @@ impl fmt::Display for BookEntry {
 }
 
 /// A struct that helps to manage a library and its books.
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Library {
-    books_list: HashMap<(String, String), BookEntry>,
+    books_list: HashMap<book::BookID, BookEntry>,
 }
 
 impl Library {
-    /// Creates a new instance of a library
-    pub fn new() -> Self {
-        Library {
-            books_list: HashMap::new(),
-        }
-    }
-
     /// Adds a new book to the library database.
     /// If the library has the given book, just add another copy of it.
     pub fn add_new_book(&mut self, new_book: book::Book) {
@@ -90,7 +83,7 @@ impl Library {
     /// Removes a book (identifies by its name and its author name) from the library if it is not borrowed.
     /// If the book is borrowed this function panics.
     pub fn remove_book(&mut self, book_name: &str, author_name: &str) {
-        let book_id = (book_name.to_string(), author_name.to_string());
+        let book_id= book::BookID { name: book_name.to_string(), author: author_name.to_string() };
         match self.books_list.get(&book_id) {
             Some(book_entry) => {
                 if book_entry.is_borrowed() {
@@ -108,7 +101,7 @@ impl Library {
     pub fn borrow_book(&mut self, book_name: &str, author_name: &str) -> &book::Book {
         match self
             .books_list
-            .get_mut(&(book_name.to_string(), author_name.to_string()))
+            .get_mut(&book::BookID { name: book_name.to_string(), author: author_name.to_string() })
         {
             Some(book_entry) => book_entry.borrow_book(),
             None => panic!("Try to borrow not exist book"),
@@ -119,7 +112,7 @@ impl Library {
     pub fn return_book(&mut self, book_name: &str, author_name: &str) {  
         match self
             .books_list
-            .get_mut(&(book_name.to_string(), author_name.to_string()))
+            .get_mut(&book::BookID { name: book_name.to_string(), author: author_name.to_string() })
         {
             Some(book_entry) => book_entry.return_book(),
             None => println!("Try to return a book that does not belong to the library"),
@@ -143,12 +136,12 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_borrow_not_exist_book() {
-        Library::new().borrow_book("Unknown", "Unknown");
+        Library::default().borrow_book("Unknown", "Unknown");
     }
 
     #[test]
     fn test_good_borrowing_book() {
-        let mut library = Library::new();
+        let mut library = Library::default();
         library.add_new_book(book::Book::new(
             "Try",
             "Try2",
@@ -164,7 +157,7 @@ mod tests {
         assert_ne!(
             library
                 .books_list
-                .get(&("Try".to_string(), "Try2".to_string())),
+                .get(&book::BookID{name: "Try".to_string(), author: "Try2".to_string()}),
             None
         );
 
@@ -178,7 +171,7 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_remove_borroed_book() {
-        let mut library = Library::new();
+        let mut library = Library::default();
         library.add_new_book(book::Book::new(
             "Try",
             "Try2",

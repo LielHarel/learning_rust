@@ -45,32 +45,36 @@ impl str::FromStr for BookCatagory {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub struct BookID {
+    pub name: String,
+    pub author: String,
+}
+
 /// A struct that holds all the information about a book.
 #[derive(Debug)]
 pub struct Book {
-    name: String,
-    author: String,
+    book_id: BookID,
     catagory: BookCatagory,
     year_of_publication: u32,
 }
 
 impl Book {
     /// Creates a new instance of a book.
-    pub fn new(name: &str, autor: &str, catagory: BookCatagory, year_of_publication: u32) -> Self {
+    pub fn new(name: &str, author: &str, catagory: BookCatagory, year_of_publication: u32) -> Self {
         if year_of_publication > CURRENT_YEAR {
             panic!("{year_of_publication} is not valid since the year now is just {CURRENT_YEAR}");
         }
         Book {
-            name: name.to_string(),
-            author: autor.to_string(),
+            book_id: BookID{name: name.to_string(), author: author.to_string()},
             catagory,
             year_of_publication,
         }
     }
 
     /// Returns the tuple (book's name, author's name) which is the ID of a book.
-    pub fn get_id(&self) -> (String, String) {
-        (self.name.clone(), self.author.clone())
+    pub fn get_id(&self) -> BookID {
+        self.book_id.clone()
     }
 
     /// Asks full details about a book from user and returns an instance of [`Book`].
@@ -116,15 +120,14 @@ impl fmt::Display for Book {
         write!(
             f,
             "the book '{}' by '{}' is a {} book that was published in {}",
-            self.name, self.author, self.catagory, self.year_of_publication
+            self.book_id.name, self.book_id.author, self.catagory, self.year_of_publication
         )
     }
 }
 
 impl PartialEq for Book {
     fn eq(&self, other: &Self) -> bool {
-        self.name == other.name
-            && self.author == other.author
+        self.book_id == other.book_id
             && self.catagory == other.catagory
             && self.year_of_publication == other.year_of_publication
     }
