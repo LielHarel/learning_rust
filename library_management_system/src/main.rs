@@ -1,4 +1,5 @@
 use library_management_system::library;
+use library_management_system::library_cli;
 use std::io;
 
 fn main() {
@@ -22,10 +23,10 @@ fn main() {
             .expect("Did not enter a number of operation");
 
         match operation_number {
-            1 => library_management_system::add_new_book_from_user(&mut library),
-            2 => library_management_system::remove_book_user_ask(&mut library),
-            3 => library_management_system::borrow_book_user_ask(&mut library),
-            4 => library_management_system::return_book_user_ask(&mut library),
+            1 => library_cli::add_new_book_from_user(&mut library),
+            2 => library_cli::remove_book_user_ask(&mut library),
+            3 => library_cli::borrow_book_user_ask(&mut library),
+            4 => library_cli::return_book_user_ask(&mut library),
             5 => println!("{library}"),
             _ => println!("Enter invalid operation number, try again"),
         }
