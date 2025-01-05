@@ -1,11 +1,10 @@
-pub mod book;
 pub mod library;
 
 use std::io;
 
 /// Gets from user information about a new book and adds it to the given library.
 pub fn add_new_book_from_user(library: &mut library::Library) {
-    let new_book = book::Book::get_book_from_user();
+    let new_book = library::book::Book::get_book_from_user();
     library.add_new_book(new_book);
 }
 

@@ -131,7 +131,7 @@ impl fmt::Display for Book {
 
 #[cfg(test)]
 mod tests {
-    use crate::book::{Book, BookCatagory};
+    use super::{Book, BookCatagory};
 
     #[test]
     fn test_not_exist_catagory_string() {

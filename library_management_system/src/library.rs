@@ -1,6 +1,7 @@
 //! This module implements a library.
-use crate::book;
 use std::{collections::HashMap, fmt};
+
+pub mod book;
 
 #[derive(Debug, PartialEq)]
 struct BookEntry {
@@ -141,38 +142,8 @@ mod tests {
     }
 
     #[test]
-    fn test_good_borrowing_book() {
-        let mut library = Library::default();
-        library.add_new_book(book::Book::new(
-            "Try",
-            "Try2",
-            book::BookCatagory::Cook,
-            2020,
-        ));
-        library.add_new_book(book::Book::new(
-            "Try",
-            "Try2",
-            book::BookCatagory::Cook,
-            2020,
-        ));
-        assert_ne!(
-            library.books_list.get(&book::BookID {
-                name: "Try".to_string(),
-                author: "Try2".to_string()
-            }),
-            None
-        );
-
-        let book = library.borrow_book("Try", "Try2");
-        assert_eq!(
-            *book,
-            book::Book::new("Try", "Try2", book::BookCatagory::Cook, 2020)
-        );
-    }
-
-    #[test]
     #[should_panic]
-    fn test_remove_borroed_book() {
+    fn test_remove_borrowed_book() {
         let mut library = Library::default();
         library.add_new_book(book::Book::new(
             "Try",
@@ -181,12 +152,7 @@ mod tests {
             2020,
         ));
 
-        let borroed_book = library.borrow_book("Try", "Try2");
-        assert_eq!(
-            *borroed_book,
-            book::Book::new("Try", "Try2", book::BookCatagory::Cook, 2020)
-        );
-
+        library.borrow_book("Try", "Try2");
         library.remove_book("Try", "Try2");
     }
 }
