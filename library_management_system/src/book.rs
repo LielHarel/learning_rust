@@ -46,7 +46,7 @@ impl str::FromStr for BookCatagory {
 }
 
 /// A struct that holds all the information about a book.
-#[derive(Debug, Eq)]
+#[derive(Debug)]
 pub struct Book {
     name: String,
     author: String,

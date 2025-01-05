@@ -2,7 +2,7 @@
 use crate::book;
 use std::{collections::HashMap, fmt};
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq)]
 struct BookEntry {
     book: book::Book,
     curent_amount: u32,
