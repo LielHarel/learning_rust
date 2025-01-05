@@ -3,18 +3,12 @@
 use std::{collections::HashMap, io};
 
 /// Struct that holds the frequencies of words and analyze it.
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct TextAnalyzer {
     freqs_of_words: HashMap<String, u32>,
 }
 
 impl TextAnalyzer {
-    /// Creates a new instance of [`TextAnalyzer`] struct
-    pub fn new() -> Self {
-        TextAnalyzer {
-            freqs_of_words: HashMap::new(),
-        }
-    }
     /// Updates words frequencies according to the words in the text.
     ///
     /// # Examples
@@ -22,7 +16,7 @@ impl TextAnalyzer {
     /// ```
     /// use simple_text_analyzer::text_analyzer::TextAnalyzer;
     ///
-    /// let mut text_analyzer = TextAnalyzer::new();
+    /// let mut text_analyzer = TextAnalyzer::default();
     /// text_analyzer.add_info_from_text("Hello world\n");
     /// assert_eq!(text_analyzer.get_word_freq("hello"), 1);
     /// assert_eq!(text_analyzer.get_word_freq("world"), 1);
@@ -53,7 +47,7 @@ impl TextAnalyzer {
     /// ```
     /// use simple_text_analyzer::text_analyzer::TextAnalyzer;
     ///
-    /// let mut text_analyzer = TextAnalyzer::new();
+    /// let mut text_analyzer = TextAnalyzer::default();
     /// text_analyzer.add_info_from_text("Hello world");
     /// assert_eq!(text_analyzer.get_word_freq("hello"), 1);
     /// assert_eq!(text_analyzer.get_word_freq("world"), 1);
@@ -61,10 +55,6 @@ impl TextAnalyzer {
     /// assert_eq!(text_analyzer.get_word_freq("hello\n"), 0);
     /// ```
     pub fn get_word_freq(&self, word: &str) -> u32 {
-        if word.chars().any(|c| c.is_whitespace()) {
-            // Meaning this is not just a word
-            return 0;
-        }
         self.freqs_of_words
             .get(&word.to_lowercase())
             .copied()
@@ -89,12 +79,12 @@ mod tests {
 
     #[test]
     fn test_not_exist_word_freq() {
-        assert_eq!(TextAnalyzer::new().get_word_freq("Hello"), 0)
+        assert_eq!(TextAnalyzer::default().get_word_freq("Hello"), 0)
     }
 
     #[test]
     fn test_exist_words_freq() {
-        let mut text_analyzer = TextAnalyzer::new();
+        let mut text_analyzer = TextAnalyzer::default();
         text_analyzer.add_info_from_text("Hello world");
         assert_eq!(text_analyzer.get_word_freq("hello"), 1);
         assert_eq!(text_analyzer.get_word_freq("world"), 1);
@@ -102,14 +92,14 @@ mod tests {
 
     #[test]
     fn test_not_a_word_returns_zero_freq() {
-        let mut text_analyzer = TextAnalyzer::new();
+        let mut text_analyzer = TextAnalyzer::default();
         text_analyzer.add_info_from_text("Hello world");
         assert_eq!(text_analyzer.get_word_freq("hello\n"), 0);
         assert_eq!(text_analyzer.get_word_freq("world\n"), 0);
     }
     #[test]
     fn test_exist_words_in_multiline_text() {
-        let mut text_analyzer = TextAnalyzer::new();
+        let mut text_analyzer = TextAnalyzer::default();
         text_analyzer.add_info_from_text("Hello world\n Hello \nworld");
         assert_eq!(text_analyzer.get_word_freq("hello"), 2);
         assert_eq!(text_analyzer.get_word_freq("world"), 2);
@@ -117,7 +107,7 @@ mod tests {
 
     #[test]
     fn test_exist_words_in_hebrew_text() {
-        let mut text_analyzer = TextAnalyzer::new();
+        let mut text_analyzer = TextAnalyzer::default();
         text_analyzer.add_info_from_text("שלום עולם");
         assert_eq!(text_analyzer.get_word_freq("שלום"), 1);
         assert_eq!(text_analyzer.get_word_freq("עולם"), 1);

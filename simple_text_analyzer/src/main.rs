@@ -2,7 +2,7 @@ use simple_text_analyzer::text_analyzer::TextAnalyzer;
 use std::io;
 
 fn main() {
-    let mut text_analyzer = TextAnalyzer::new();
+    let mut text_analyzer = TextAnalyzer::default();
 
     loop {
         println!("Please choose an operation (enter a number):");
