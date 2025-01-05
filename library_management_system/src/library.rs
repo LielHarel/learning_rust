@@ -2,63 +2,12 @@
 use std::{collections::HashMap, fmt};
 
 pub mod book;
-
-#[derive(Debug, PartialEq)]
-struct BookEntry {
-    book: book::Book,
-    curent_amount: u32,
-    amount_of_copies: u32,
-}
-
-/// An entry in the database of a library about an existed books .
-impl BookEntry {
-    fn new(book: book::Book) -> Self {
-        BookEntry {
-            book,
-            curent_amount: 1,
-            amount_of_copies: 1,
-        }
-    }
-
-    fn add_copy_of_book(&mut self) {
-        self.curent_amount += 1;
-        self.amount_of_copies += 1;
-    }
-
-    fn borrow_book(&mut self) -> &book::Book {
-        if self.curent_amount == 0 {
-            panic!("Cannot borrow {} book since does not exist", self.book);
-        }
-        self.curent_amount -= 1;
-        &self.book
-    }
-
-    fn return_book(&mut self) {
-        self.curent_amount += 1;
-        if self.curent_amount > self.amount_of_copies {
-            self.amount_of_copies = self.curent_amount;
-        }
-    }
-
-    fn is_borrowed(&self) -> bool {
-        self.curent_amount != self.amount_of_copies
-    }
-}
-
-impl fmt::Display for BookEntry {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{}\nIt has {} copies in the library and currently {} available for borrowing",
-            self.book, self.amount_of_copies, self.curent_amount
-        )
-    }
-}
+pub mod book_entry;
 
 /// A struct that helps to manage a library and its books.
 #[derive(Debug, Default)]
 pub struct Library {
-    books_list: HashMap<book::BookID, BookEntry>,
+    books_list: HashMap<book::BookID, book_entry::BookEntry>,
 }
 
 impl Library {
@@ -75,7 +24,7 @@ impl Library {
             None => {
                 let _ = self
                     .books_list
-                    .insert(new_book.get_id(), BookEntry::new(new_book));
+                    .insert(new_book.get_id(), book_entry::BookEntry::new(new_book));
             }
         }
     }

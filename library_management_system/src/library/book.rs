@@ -53,6 +53,7 @@ pub struct BookID {
 }
 
 impl BookID {
+    /// Creates a new instance of a BookID.
     pub fn new(name: &str, author: &str) -> Self {
         BookID {
             name: name.to_string(),
