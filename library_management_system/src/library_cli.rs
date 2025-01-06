@@ -1,7 +1,14 @@
 use crate::library::{self, Library};
 use std::io;
 
-pub enum Operations {
+const ADD_NEW_BOOK: u32 = 1;
+const REMOVE_BOOK: u32 = 2;
+const BORROW_BOOK: u32 = 3;
+const RETURN_BOOK: u32 = 4;
+const PRINT_BOOKS: u32 = 5;
+
+/// Enum that represents a possible library operations
+pub enum LibraryOperations {
     AddNewBook,
     RemoveBook,
     BorrowBook,
@@ -9,29 +16,31 @@ pub enum Operations {
     PrintBook,
 }
 
-impl TryFrom<u32> for Operations {
+impl TryFrom<u32> for LibraryOperations {
     type Error = String;
 
     fn try_from(value: u32) -> Result<Self, Self::Error> {
         Ok(match value {
-            1 => Operations::AddNewBook,
-            2 => Operations::RemoveBook,
-            3 => Operations::BorrowBook,
-            4 => Operations::ReturnBook,
-            5 => Operations::PrintBook,
+            ADD_NEW_BOOK => LibraryOperations::AddNewBook,
+            REMOVE_BOOK => LibraryOperations::RemoveBook,
+            BORROW_BOOK => LibraryOperations::BorrowBook,
+            RETURN_BOOK => LibraryOperations::ReturnBook,
+            PRINT_BOOKS => LibraryOperations::PrintBook,
             _ => return Err("Value must be a number from 1 to 5".to_string()),
         })
     }
 }
 
-impl Operations {
-    pub fn get_operation_from_user() -> Result<Operations, String> {
+impl LibraryOperations {
+    /// Gets a library operation from a user that he want to preform
+    /// and returns it if the input was correct, otherwise return error message.
+    pub fn get_operation_from_user() -> Result<LibraryOperations, String> {
         println!("Please choose an operation (enter a number):");
-        println!("1) Add a new book to the library:");
-        println!("2) Remove a book from the library:");
-        println!("3) Borrow book from library:");
-        println!("4) Return book to the library:");
-        println!("5) Print books in the library:");
+        println!("{ADD_NEW_BOOK}) Add a new book to the library:");
+        println!("{REMOVE_BOOK}) Remove a book from the library:");
+        println!("{BORROW_BOOK}) Borrow book from library:");
+        println!("{RETURN_BOOK}) Return book to the library:");
+        println!("{PRINT_BOOKS}) Print books in the library:");
 
         let mut user_input = String::new();
         io::stdin()
@@ -74,39 +83,39 @@ impl LibraryCli {
 
     /// Asks from user operation on library and preform it.
     /// This function returns true on success, otherwise false.
-    pub fn menu(&mut self) -> bool {
-        let user_operation = Operations::get_operation_from_user();
+    pub fn menu_runner(&mut self) -> bool {
+        let user_operation = LibraryOperations::get_operation_from_user();
         match user_operation {
             Ok(operation) => {
                 self.preform_library_operation(operation);
                 true
             }
             Err(err) => {
-                print!("{err}\n");
+                println!("{err}");
                 false
             }
         }
     }
 
     /// Preforms an operation on library according to the given operation enum.
-    pub fn preform_library_operation(&mut self, operation: Operations) {
+    pub fn preform_library_operation(&mut self, operation: LibraryOperations) {
         match operation {
-            Operations::AddNewBook => self
+            LibraryOperations::AddNewBook => self
                 .library
                 .add_new_book(library::Book::get_book_from_user()),
-            Operations::RemoveBook => self.library.remove_book(
+            LibraryOperations::RemoveBook => self.library.remove_book(
                 &LibraryCli::get_book_name_from_user(),
                 &LibraryCli::get_book_author_from_user(),
             ),
-            Operations::BorrowBook => self.library.borrow_book(
+            LibraryOperations::BorrowBook => self.library.borrow_book(
                 &LibraryCli::get_book_name_from_user(),
                 &LibraryCli::get_book_author_from_user(),
             ),
-            Operations::ReturnBook => self.library.return_book(
+            LibraryOperations::ReturnBook => self.library.return_book(
                 &LibraryCli::get_book_name_from_user(),
                 &LibraryCli::get_book_author_from_user(),
             ),
-            Operations::PrintBook => println!("{}", self.library),
+            LibraryOperations::PrintBook => println!("{}", self.library),
         }
     }
 }
