@@ -2,11 +2,11 @@ use crate::library::{self, Library};
 use std::io;
 
 /// The operation number on a library
-const ADD_NEW_BOOK: u32 = 1;
-const REMOVE_BOOK: u32 = 2;
-const BORROW_BOOK: u32 = 3;
-const RETURN_BOOK: u32 = 4;
-const PRINT_BOOKS: u32 = 5;
+const ADD_NEW_BOOK: u8 = 1;
+const REMOVE_BOOK: u8 = 2;
+const BORROW_BOOK: u8 = 3;
+const RETURN_BOOK: u8 = 4;
+const PRINT_BOOKS: u8 = 5;
 
 /// Enum that represents a possible library operations
 pub enum LibraryOperations {
@@ -17,10 +17,10 @@ pub enum LibraryOperations {
     PrintBook,
 }
 
-impl TryFrom<u32> for LibraryOperations {
+impl TryFrom<u8> for LibraryOperations {
     type Error = String;
 
-    fn try_from(value: u32) -> Result<Self, Self::Error> {
+    fn try_from(value: u8) -> Result<Self, Self::Error> {
         Ok(match value {
             ADD_NEW_BOOK => LibraryOperations::AddNewBook,
             REMOVE_BOOK => LibraryOperations::RemoveBook,
@@ -48,7 +48,7 @@ impl LibraryOperations {
             .read_line(&mut user_input)
             .expect("Failed to read line");
 
-        let operation_numer = match user_input.trim().parse::<u32>() {
+        let operation_numer = match user_input.trim().parse::<u8>() {
             Ok(number) => number,
             Err(err) => return Err(err.to_string()),
         };
@@ -101,9 +101,7 @@ impl LibraryCli {
     /// Preforms an operation on library according to the given operation enum.
     pub fn preform_library_operation(&mut self, operation: LibraryOperations) {
         match operation {
-            LibraryOperations::AddNewBook => self
-                .library
-                .add_new_book(library::Book::get_book_from_user()),
+            LibraryOperations::AddNewBook => self.library.add_new_book(library::Book::from_user()),
             LibraryOperations::RemoveBook => self.library.remove_book(
                 &LibraryCli::get_book_name_from_user(),
                 &LibraryCli::get_book_author_from_user(),
