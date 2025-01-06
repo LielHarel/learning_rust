@@ -1,6 +1,7 @@
 use crate::library::{self, Library};
 use std::io;
 
+/// The operation number on a library
 const ADD_NEW_BOOK: u32 = 1;
 const REMOVE_BOOK: u32 = 2;
 const BORROW_BOOK: u32 = 3;
