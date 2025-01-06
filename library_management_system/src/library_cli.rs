@@ -4,7 +4,7 @@ use num::ToPrimitive;
 use num_derive::{FromPrimitive, ToPrimitive};
 use std::io;
 
-/// Enum that represents a possible library operations
+/// Enum that represents possible library operations.
 #[derive(FromPrimitive, ToPrimitive, Debug)]
 #[repr(u8)]
 pub enum LibraryOperations {
@@ -15,7 +15,12 @@ pub enum LibraryOperations {
     PrintBooks,
 }
 
-impl LibraryOperations {
+#[derive(Debug, Default)]
+pub struct LibraryCli {
+    library: Library,
+}
+
+impl LibraryCli {
     /// Gets a library operation from a user that he want to preform
     /// and returns it if the input was correct, otherwise return error message.
     pub fn get_operation_from_user() -> Result<LibraryOperations, String> {
@@ -64,14 +69,7 @@ impl LibraryOperations {
         LibraryOperations::from_u8(operation_numer)
             .ok_or(format!("{operation_numer} invalid number operation"))
     }
-}
 
-#[derive(Debug, Default)]
-pub struct LibraryCli {
-    library: Library,
-}
-
-impl LibraryCli {
     fn get_book_name_from_user() -> String {
         println!("Please enter book name:");
         let mut book_name = String::new();
@@ -94,8 +92,8 @@ impl LibraryCli {
 
     /// Asks from user operation on library and preform it.
     /// This function returns true on success, otherwise false.
-    pub fn menu_runner(&mut self) -> bool {
-        let user_operation = LibraryOperations::get_operation_from_user();
+    pub fn handle(&mut self) -> bool {
+        let user_operation = Self::get_operation_from_user();
         match user_operation {
             Ok(operation) => {
                 self.preform_library_operation(operation);
