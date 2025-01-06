@@ -56,10 +56,11 @@ impl LibraryOperations {
             .read_line(&mut user_input)
             .expect("Failed to read line");
 
-        let operation_numer = match user_input.trim().parse::<u8>() {
-            Ok(number) => number,
-            Err(err) => return Err(err.to_string()),
-        };
+        let operation_numer = user_input
+            .trim()
+            .parse::<u8>()
+            .map_err(|err| err.to_string())?;
+
         LibraryOperations::from_u8(operation_numer)
             .ok_or(format!("{operation_numer} invalid number operation"))
     }
