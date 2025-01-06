@@ -1,8 +1,10 @@
 use thiserror::Error;
 
+/// Limits for password length
 const MIN_PASS_LENGTH: usize = 8;
 const MAX_PASS_LENGTH: usize = 16;
 
+/// Password possible errors
 #[derive(Debug, Error, PartialEq, Eq)]
 pub enum PassError {
     #[error("Invalid password length, should be between {MIN_PASS_LENGTH} to {MAX_PASS_LENGTH}")]
