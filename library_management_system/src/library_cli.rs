@@ -1,35 +1,18 @@
-use crate::library::{self, Library};
+use crate::library::{Book, Library};
+use num::FromPrimitive;
+use num::ToPrimitive;
+use num_derive::{FromPrimitive, ToPrimitive};
 use std::io;
 
-/// The operation number on a library
-const ADD_NEW_BOOK: u8 = 1;
-const REMOVE_BOOK: u8 = 2;
-const BORROW_BOOK: u8 = 3;
-const RETURN_BOOK: u8 = 4;
-const PRINT_BOOKS: u8 = 5;
-
 /// Enum that represents a possible library operations
+#[derive(FromPrimitive, ToPrimitive, Debug)]
+#[repr(u8)]
 pub enum LibraryOperations {
-    AddNewBook,
+    AddNewBook = 1,
     RemoveBook,
     BorrowBook,
     ReturnBook,
-    PrintBook,
-}
-
-impl TryFrom<u8> for LibraryOperations {
-    type Error = String;
-
-    fn try_from(value: u8) -> Result<Self, Self::Error> {
-        Ok(match value {
-            ADD_NEW_BOOK => LibraryOperations::AddNewBook,
-            REMOVE_BOOK => LibraryOperations::RemoveBook,
-            BORROW_BOOK => LibraryOperations::BorrowBook,
-            RETURN_BOOK => LibraryOperations::ReturnBook,
-            PRINT_BOOKS => LibraryOperations::PrintBook,
-            _ => return Err("Value must be a number from 1 to 5".to_string()),
-        })
-    }
+    PrintBooks,
 }
 
 impl LibraryOperations {
@@ -37,11 +20,36 @@ impl LibraryOperations {
     /// and returns it if the input was correct, otherwise return error message.
     pub fn get_operation_from_user() -> Result<LibraryOperations, String> {
         println!("Please choose an operation (enter a number):");
-        println!("{ADD_NEW_BOOK}) Add a new book to the library:");
-        println!("{REMOVE_BOOK}) Remove a book from the library:");
-        println!("{BORROW_BOOK}) Borrow book from library:");
-        println!("{RETURN_BOOK}) Return book to the library:");
-        println!("{PRINT_BOOKS}) Print books in the library:");
+        println!(
+            "{}) Add a new book to the library:",
+            LibraryOperations::AddNewBook
+                .to_u8()
+                .expect("should not happen")
+        );
+        println!(
+            "{}) Remove a book from the library:",
+            LibraryOperations::RemoveBook
+                .to_u8()
+                .expect("should not happen")
+        );
+        println!(
+            "{}) Borrow book from library:",
+            LibraryOperations::BorrowBook
+                .to_u8()
+                .expect("should not happen")
+        );
+        println!(
+            "{}) Return book to the library:",
+            LibraryOperations::ReturnBook
+                .to_u8()
+                .expect("should not happen")
+        );
+        println!(
+            "{}) Print books in the library:",
+            LibraryOperations::PrintBooks
+                .to_u8()
+                .expect("should not happen")
+        );
 
         let mut user_input = String::new();
         io::stdin()
@@ -52,7 +60,8 @@ impl LibraryOperations {
             Ok(number) => number,
             Err(err) => return Err(err.to_string()),
         };
-        operation_numer.try_into()
+        LibraryOperations::from_u8(operation_numer)
+            .ok_or(format!("{operation_numer} invalid number operation"))
     }
 }
 
@@ -101,7 +110,7 @@ impl LibraryCli {
     /// Preforms an operation on library according to the given operation enum.
     pub fn preform_library_operation(&mut self, operation: LibraryOperations) {
         match operation {
-            LibraryOperations::AddNewBook => self.library.add_new_book(library::Book::from_user()),
+            LibraryOperations::AddNewBook => self.library.add_new_book(Book::from_user()),
             LibraryOperations::RemoveBook => self.library.remove_book(
                 &LibraryCli::get_book_name_from_user(),
                 &LibraryCli::get_book_author_from_user(),
@@ -114,7 +123,7 @@ impl LibraryCli {
                 &LibraryCli::get_book_name_from_user(),
                 &LibraryCli::get_book_author_from_user(),
             ),
-            LibraryOperations::PrintBook => println!("{}", self.library),
+            LibraryOperations::PrintBooks => println!("{}", self.library),
         }
     }
 }
