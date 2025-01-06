@@ -34,12 +34,11 @@ impl BookEntry {
     }
 
     /// Updates the book entry to have one less book in the stock.
-    pub fn borrow_book(&mut self) -> &book::Book {
+    pub fn borrow_book(&mut self) {
         if self.curent_amount == 0 {
             panic!("Cannot borrow {} book since does not exist", self.book);
         }
         self.curent_amount -= 1;
-        &self.book
     }
 
     /// Updates the book entry to have one more book in the stock.
