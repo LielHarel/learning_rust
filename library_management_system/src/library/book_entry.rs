@@ -5,9 +5,6 @@ use std::fmt;
 
 use crate::library::book;
 
-/// When create a new book entry the initial value is 1 for the amount of book.
-const INITIAL_AMOUNT_OF_BOOK: u32 = 1;
-
 /// A struct that holds all the information that is
 /// needed for tracing a specifc book in a library.
 #[derive(Debug, PartialEq)]
@@ -18,12 +15,15 @@ pub struct BookEntry {
 }
 
 impl BookEntry {
+    /// When create a new book entry the initial value is 1 for the amount of book.
+    const INITIAL_AMOUNT_OF_BOOK: u32 = 1;
+
     /// Creates a new instance of a BookEntry.
     pub fn new(book: book::Book) -> Self {
         BookEntry {
             book,
-            curent_amount: INITIAL_AMOUNT_OF_BOOK,
-            amount_of_copies: INITIAL_AMOUNT_OF_BOOK,
+            curent_amount: BookEntry::INITIAL_AMOUNT_OF_BOOK,
+            amount_of_copies: BookEntry::INITIAL_AMOUNT_OF_BOOK,
         }
     }
 
