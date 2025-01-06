@@ -1,8 +1,11 @@
 //! This module implements a library.
 use std::{collections::HashMap, fmt};
 
-pub mod book;
+mod book;
+
 pub mod book_entry;
+
+pub use book::{Book, BookID};
 
 /// A struct that helps to manage a library and its books.
 #[derive(Debug, Default)]

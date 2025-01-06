@@ -2,8 +2,6 @@
 
 use std::{fmt, io, str};
 
-const CURRENT_YEAR: u32 = 2025;
-
 /// A book possible catagories.
 #[derive(Debug, PartialEq, Eq)]
 pub enum BookCatagory {
@@ -33,15 +31,15 @@ impl str::FromStr for BookCatagory {
     type Err = String;
 
     fn from_str(input: &str) -> Result<Self, Self::Err> {
-        match input.to_lowercase().as_str() {
-            "horror" => Ok(BookCatagory::Horror),
-            "science" => Ok(BookCatagory::Science),
-            "fantasy" => Ok(BookCatagory::Fantasy),
-            "history" => Ok(BookCatagory::History),
-            "drama" => Ok(BookCatagory::Drama),
-            "cook" => Ok(BookCatagory::Cook),
-            _ => Err(format!("{input} is invalid book catagory")),
-        }
+        Ok(match input.to_lowercase().as_str() {
+            "horror" => BookCatagory::Horror,
+            "science" => BookCatagory::Science,
+            "fantasy" => BookCatagory::Fantasy,
+            "history" => BookCatagory::History,
+            "drama" => BookCatagory::Drama,
+            "cook" => BookCatagory::Cook,
+            _ => return Err(format!("{input} is invalid book catagory")),
+        })
     }
 }
 
@@ -73,17 +71,14 @@ pub struct Book {
 impl Book {
     /// Creates a new instance of a book.
     pub fn new(name: &str, author: &str, catagory: BookCatagory, year_of_publication: u32) -> Self {
-        if year_of_publication > CURRENT_YEAR {
-            panic!("{year_of_publication} is not valid since the year now is just {CURRENT_YEAR}");
-        }
-        Book {
+        Self {
             book_id: BookID::new(name, author),
             catagory,
             year_of_publication,
         }
     }
 
-    /// Returns the tuple (book's name, author's name) which is the ID of a book.
+    /// Returns the ID of a book.
     pub fn get_id(&self) -> BookID {
         self.book_id.clone()
     }
@@ -145,17 +140,6 @@ mod tests {
         assert_eq!(
             "comedy".parse::<BookCatagory>(),
             Err(String::from("comedy is invalid book catagory"))
-        );
-    }
-
-    #[test]
-    #[should_panic]
-    fn test_not_exist_publication_year() {
-        Book::new(
-            "The maze runner",
-            "James Smith Dashner",
-            BookCatagory::Drama,
-            2026,
         );
     }
 

@@ -71,11 +71,7 @@ mod tests {
 
     #[test]
     fn test_borrow_book() {
-        let mut book_entry = BookEntry::new(
-            Book::new("try",
-            "try",
-            BookCatagory::Science,
-            2020));
+        let mut book_entry = BookEntry::new(Book::new("try", "try", BookCatagory::Science, 2020));
         assert_eq!(book_entry.amount_of_copies, 1);
         assert_eq!(book_entry.curent_amount, 1);
         book_entry.borrow_book();
