@@ -1,6 +1,6 @@
 use crate::library::{Book, Library};
-use num::FromPrimitive;
-use num::ToPrimitive;
+use num_traits::cast::FromPrimitive;
+use num_traits::cast::ToPrimitive;
 use num_derive::{FromPrimitive, ToPrimitive};
 use std::io;
 
@@ -28,32 +28,27 @@ impl LibraryCli {
         println!(
             "{}) Add a new book to the library:",
             LibraryOperations::AddNewBook
-                .to_u8()
-                .expect("should not happen")
+                .to_u8().unwrap()
         );
         println!(
             "{}) Remove a book from the library:",
             LibraryOperations::RemoveBook
-                .to_u8()
-                .expect("should not happen")
+                .to_u8().unwrap()
         );
         println!(
             "{}) Borrow book from library:",
             LibraryOperations::BorrowBook
-                .to_u8()
-                .expect("should not happen")
+                .to_u8().unwrap()
         );
         println!(
             "{}) Return book to the library:",
             LibraryOperations::ReturnBook
-                .to_u8()
-                .expect("should not happen")
+                .to_u8().unwrap()
         );
         println!(
             "{}) Print books in the library:",
             LibraryOperations::PrintBooks
-                .to_u8()
-                .expect("should not happen")
+                .to_u8().unwrap()
         );
 
         let mut user_input = String::new();
@@ -111,16 +106,16 @@ impl LibraryCli {
         match operation {
             LibraryOperations::AddNewBook => self.library.add_new_book(Book::from_user()),
             LibraryOperations::RemoveBook => self.library.remove_book(
-                &LibraryCli::get_book_name_from_user(),
-                &LibraryCli::get_book_author_from_user(),
+                &Self::get_book_name_from_user(),
+                &Self::get_book_author_from_user(),
             ),
             LibraryOperations::BorrowBook => self.library.borrow_book(
-                &LibraryCli::get_book_name_from_user(),
-                &LibraryCli::get_book_author_from_user(),
+                &Self::get_book_name_from_user(),
+                &Self::get_book_author_from_user(),
             ),
             LibraryOperations::ReturnBook => self.library.return_book(
-                &LibraryCli::get_book_name_from_user(),
-                &LibraryCli::get_book_author_from_user(),
+                &Self::get_book_name_from_user(),
+                &Self::get_book_author_from_user(),
             ),
             LibraryOperations::PrintBooks => println!("{}", self.library),
         }
